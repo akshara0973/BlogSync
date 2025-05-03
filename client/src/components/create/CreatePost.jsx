@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { styled, Box, TextareaAutosize, Button, InputBase, FormControl } from '@mui/material';
-import { AddCircle as Add } from '@mui/icons-material';
+import { AddCircle as Add, Description as DocIcon, Image as ImageIcon } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API } from '../../service/api';
 import { DataContext } from '../../context/DataProvider';
@@ -8,38 +8,80 @@ import mammoth from 'mammoth'; // Import mammoth for word file parsing
 
 const Container = styled(Box)(({ theme }) => ({
     margin: '50px 100px',
+    color: '#e0e0e0',
+    background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
+    padding: '30px',
+    borderRadius: '12px',
+    boxShadow: '0 0 15px rgba(0, 0, 0, 0.8)',
     [theme.breakpoints.down('md')]: {
-        margin: 0
-    }
+        margin: '20px',
+    },
 }));
 
 const Image = styled('img')({
     width: '100%',
     height: '50vh',
-    objectFit: 'cover'
+    objectFit: 'cover',
+    borderRadius: '8px',
+    border: '1px solid #444',
 });
 
 const StyledFormControl = styled(FormControl)`
     margin-top: 10px;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    background: #234a57;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 8px 16px;
 `;
 
 const InputTextField = styled(InputBase)`
     flex: 1;
     margin: 0 30px;
-    font-size: 25px;
+    font-size: 24px;
+    color: #e0e0e0;
+    background-color: transparent;
+
+    & input {
+        color: inherit;
+    }
 `;
 
 const Textarea = styled(TextareaAutosize)`
-    width: 100%;
-    border: none;
-    margin-top: 50px;
+    width: 97%;
+    background: #234a57;
+    color: #e0e0e0;
+    border: 1px solid #555;
+    margin-top: 40px;
     font-size: 18px;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: inherit;
+    resize: none;
+
     &:focus-visible {
         outline: none;
+        border-color: #64b5f6;
     }
 `;
+
+const UploadButton = styled(Button)`
+    background: linear-gradient(135deg, #234a57, #143368);
+    color: #fff;
+    height: 48px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-transform: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+
+    &:hover {
+        background: linear-gradient(135deg, #2a5298, #1e3c72);
+    }
+`;
+
 
 const initialPost = {
     title: '',
@@ -157,31 +199,33 @@ const CreatePost = () => {
 
             <StyledFormControl>
                 {/* Word File Upload */}
-                <label htmlFor="wordFileInput">
-                    <Add fontSize="large" color="action" />
+                <label htmlFor="wordFileInput" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', color: '#fff' }}>
+                <DocIcon />
                 </label>
                 <input
-                    type="file"
-                    id="wordFileInput"
-                    accept=".docx"
-                    style={{ display: "none" }}
-                    onChange={handleWordFileChange}
+                type="file"
+                id="wordFileInput"
+                accept=".docx"
+                style={{ display: "none" }}
+                onChange={handleWordFileChange}
                 />
 
                 {/* Photo Upload */}
-                <label htmlFor="photoFileInput">
-                    <Add fontSize="large" color="action" />
+                <label htmlFor="photoFileInput" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', color: '#fff' }}>
+                <ImageIcon />
                 </label>
                 <input
-                    type="file"
-                    id="photoFileInput"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handlePhotoFileChange}
+                type="file"
+                id="photoFileInput"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handlePhotoFileChange}
                 />
 
+
                 <InputTextField onChange={(e) => handleChange(e)} name='title' placeholder="Title" />
-                <Button onClick={() => savePost()} variant="contained" color="primary">Publish</Button>
+                <UploadButton onClick={() => savePost()}>Publish</UploadButton>
+
 
             </StyledFormControl>
 

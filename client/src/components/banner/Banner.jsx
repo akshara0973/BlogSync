@@ -1,35 +1,16 @@
+import { styled, Box } from '@mui/material';
 
-import { styled, Box, Typography } from '@mui/material';
-
-const Image = styled(Box)`
-    width: 100%;
-    background: url(https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg) center/55% repeat-x #000;
-    height: 50vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`;
-
-const Heading = styled(Typography)`
-    font-size: 70px;
-    color: #FFFFFF;
-    line-height: 1
-`;
-
-const SubHeading = styled(Typography)`
-    font-size: 20px;
-    background: #FFFFFF;
-`;
 
 const Banner = () => {
-    
-    return (
-        <Image>
-            <Heading>BLOG</Heading>
-            <SubHeading>Code for Interview</SubHeading>
-        </Image>
-    )
-}
+  return (
+      <div style={{ width: '100%', height: '50vh', overflow: 'hidden' }}>
+          <video autoPlay muted loop style={{ width: '100%', height: '100%', objectFit: 'cover' }}>
+              <source src="/banner.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+          </video>
+      </div>
+  );
+};
+
 
 export default Banner;

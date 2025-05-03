@@ -7,30 +7,41 @@ import { API } from '../../../service/api';
 import { DataContext } from "../../../context/DataProvider";
 
 const Component = styled(Box)`
-    margin-top: 30px;
-    background: #F5F5F5;
-    padding: 10px;
+  margin-top: 30px;
+  background: #1f1f1f;
+  padding: 10px 16px;
+  border-radius: 8px;
+  color: #e0e0e0;
 `;
 
 const Container = styled(Box)`
-    display: flex;
-    margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
 `;
 
 const Name = styled(Typography)`
-    font-weight: 600,
-    font-size: 18px;
-    margin-right: 20px;
+  font-weight: 600;
+  font-size: 18px;
+  margin-right: 20px;
+  color: #ffffff;
 `;
 
 const StyledDate = styled(Typography)`
-    font-size: 14px;
-    color: #878787;
+  font-size: 14px;
+  color: #a0a0a0;
 `;
 
 const DeleteIcon = styled(Delete)`
-    margin-left: auto;
+  margin-left: auto;
+  color: #ef5350;
+  cursor: pointer;
+  transition: color 0.3s;
+  &:hover {
+    color: #ff867c;
+  }
 `;
+
 
 const Comment = ({ comment, setToggle }) => {
 
