@@ -1,5 +1,8 @@
 
 import Post from '../model/post.js';
+import mongoose from 'mongoose';
+// import Post from '../model/post.js';
+
 
 
 export const createPost = async (request, response) => {
@@ -29,17 +32,17 @@ export const updatePost = async (request, response) => {
     }
 }
 
-export const deletePost = async (request, response) => {
-    try {
-        const post = await Post.findById(request.params.id);
+// export const deletePost = async (request, response) => {
+//     try {
+//         const post = await Post.findById(request.params.id);
         
-        await post.delete()
+//         await post.delete()
 
-        response.status(200).json('post deleted successfully');
-    } catch (error) {
-        response.status(500).json(error)
-    }
-}
+//         response.status(200).json('post deleted successfully');
+//     } catch (error) {
+//         response.status(500).json(error)
+//     }
+// }
 
 export const getPost = async (request, response) => {
     try {
@@ -50,6 +53,28 @@ export const getPost = async (request, response) => {
         response.status(500).json(error)
     }
 }
+
+export const deletePost = async (request, response) => {
+    const { id } = request.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return response.status(400).json({ message: 'Invalid post ID' });
+    }
+
+    try {
+        const post = await Post.findById(id);
+
+        if (!post) {
+            return response.status(404).json({ message: 'Post not found' });
+        }
+
+        await post.deleteOne(); // or await Post.findByIdAndDelete(id)
+
+        response.status(200).json('Post deleted successfully');
+    } catch (error) {
+        response.status(500).json({ message: error.message });
+    }
+};
 
 export const getAllPosts = async (request, response) => {
     let username = request.query.username;
