@@ -9,21 +9,35 @@ import { API } from '../../../service/api';
 import Comment from './Comment';
 
 const Container = styled(Box)`
-    margin-top: 100px;
-    display: flex;
+  margin-top: 100px;
+  display: flex;
+  align-items: flex-start;
 `;
 
 const Image = styled('img')({
-    width: 50,
-    height: 50,
-    borderRadius: '50%'
+  width: 50,
+  height: 50,
+  borderRadius: '50%',
+  border: '2px solid #444',
 });
 
 const StyledTextArea = styled(TextareaAutosize)`
-    height: 100px !important;
-    width: 100%; 
-    margin: 0 20px;
+  height: 100px !important;
+  width: 100%; 
+  margin: 0 20px;
+  padding: 12px;
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #444;
+  border-radius: 6px;
+  font-family: inherit;
+  resize: none;
+  &:focus {
+    outline: none;
+    border-color: #90caf9;
+  }
 `;
+
 
 const initialValue = {
     name: '',
@@ -76,13 +90,18 @@ const Comments = ({ post }) => {
                     onChange={(e) => handleChange(e)} 
                     value={comment.comments}
                 />
-                <Button 
+               <Button 
                     variant="contained" 
-                    color="primary" 
                     size="medium" 
-                    style={{ height: 40 }}
+                    style={{ 
+                        height: 40, 
+                        background: "linear-gradient(135deg, rgb(35, 74, 87), rgb(20, 51, 104))"
+                    }}
                     onClick={(e) => addComment(e)}
-                >Post</Button>             
+                    >
+                    Post
+                    </Button>
+            
             </Container>
             <Box>
                 {

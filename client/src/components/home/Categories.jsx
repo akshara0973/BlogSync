@@ -5,21 +5,49 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categories } from '../../constants/data';
 
 const StyledTable = styled(Table)`
-    border: 1px solid rgba(224, 224, 224, 1);
+  border: 1px solid #2c5364;
+  background-color: #203a43;
+  color: #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
+
+  & th, & td {
+    border-bottom: 1px solid #2c5364;
+    color: #d0d0d0;
+    padding: 12px 16px;
+  }
+
+  & th {
+    background-color: #2c3e50;
+    color: #ffffff;
+    font-weight: bold;
+  }
 `;
-    
 const StyledButton = styled(Button)`
-    margin: 20px;
-    width: 85%;
-    background: #6495ED;
-    color: #fff;
-    text-decoration: none;
+  margin: 20px;
+  width: 85%;
+  background: linear-gradient(135deg,rgb(35, 74, 87),rgb(20, 51, 104));
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #2a5298, #1e3c72);
+  }
 `;
-    
 const StyledLink = styled(Link)`
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: #64b5f6;
+  font-weight: 500;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #ffffff;
+  }
 `;
+
 
 const Categories = () => {
     const [searchParams] = useSearchParams();
