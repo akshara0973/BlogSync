@@ -1,55 +1,88 @@
-
-import { Box, styled, Typography, Link } from '@mui/material';
-import { GitHub, Instagram, Email } from '@mui/icons-material';
-
-const Banner = styled(Box)`
-    background-image: url(https://www.wallpapertip.com/wmimgs/23-236943_us-wallpaper-for-website.jpg);
-    width: 100%;
-    height: 50vh;
-    background-position: left 0px bottom 0px;
-    background-size: cover;
-`;
+import React from 'react';
+import { Box, Typography, styled, Grid, Link } from '@mui/material';
 
 const Wrapper = styled(Box)`
-    padding: 20px;
-    & > h3, & > h5 {
-        margin-top: 50px;
-    }
+  background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
+  color: #e0e0e0;
+  padding: 60px 20px;
+  font-family: 'Segoe UI', sans-serif;
 `;
 
-const Text = styled(Typography)`
-    color: #878787;
+const Highlight = styled('span')`
+  color: #4fc3f7;
+`;
+
+const Stat = styled(Box)`
+  margin-bottom: 20px;
+`;
+
+const Value = styled(Typography)`
+  font-size: 20px;
+  font-weight: bold;
+  color: #4fc3f7;
+`;
+
+const Label = styled(Typography)`
+  font-size: 1rem;
+  color: #b0bec5;
+`;
+
+const StyledLink = styled(Link)`
+  color: #90caf9;
+  display: block;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const About = () => {
+  return (
+    <Wrapper>
+      <Grid container spacing={6}>
+        {/* Left Section: Mission */}
+        <Grid item xs={12} md={6}>
+          <Typography variant="h4" fontWeight="bold" gutterBottom color="#ffffff">
+          We write <Highlight>authentic, insightful stories</Highlight>insightful stories to spark curiosity and meaningful conversations.
+          
+          </Typography>
+          <Typography variant="body1" color="#cfd8dc" mt={2}>
+          At our core, we're a team of curious minds who believe in the power of words to inform, inspire, and connect. Whether it's the latest trends in technology, reflections on personal growth, or deep dives into cultural moments, our blog is your space to explore ideas that matter.          </Typography>
 
-    return (
-        <Box>
-            <Banner/>
-            <Wrapper>
-                <Typography variant="h3">Code for Interview</Typography>
-                <Text variant="h5">I'm a Software Engineer based in India. 
-                    I've built websites, desktop applications and corporate software.<br />
-                    If you are interested, you can view some of my favorite projects here
-                    <Box component="span" style={{ marginLeft: 5 }}>
-                        <Link href="https://github.com/kunaltyagi9" color="inherit" target="_blank"><GitHub /></Link>
-                    </Box>
-                </Text>
-                <Text variant="h5">
-                    Need something built or simply want to have chat? Reach out to me on
-                    <Box component="span" style={{ marginLeft: 5 }}>
-                        <Link href="https://www.instagram.com/codeforinterview/" color="inherit" target="_blank">
-                            <Instagram />
-                        </Link>
-                    </Box>  
-                        or send me an Email 
-                        <Link href="mailto:codeforinterview@gmail.com?Subject=This is a subject" target="_blank" color="inherit">
-                            <Email />
-                        </Link>.
-                </Text>
-            </Wrapper>
-        </Box>
-    )
-}
+          <Box mt={4}>
+            <StyledLink href="#">Write for BlogSync ↗</StyledLink>
+            <StyledLink href="#">Community Guidelines ↗</StyledLink>
+            <StyledLink href="#">Press & Mentions ↗</StyledLink>
+            <StyledLink href="#">Contact Us ↗</StyledLink>
+          </Box>
+
+        </Grid>
+
+        {/* Right Section: Stats */}
+        <Grid item xs={12} md={6}>
+          <Stat>
+            <Value>✍️ Original voices, not algorithms</Value>
+            <Label>Every piece is written with purpose and perspective, not just SEO.</Label>
+          </Stat>
+          <Stat>
+            <Value>🌍 Global mindset, local relevance</Value>
+            <Label> We cover stories that resonate across borders while staying grounded in real experiences.</Label>
+          </Stat>
+          <Stat>
+            <Value>💬 Engaging, not echoing</Value>
+            <Label>Our blog encourages discussion, questions, and real dialogue—not just likes and shares.</Label>
+          </Stat>
+          <Stat>
+            <Value>🚀 Built for lifelong learners</Value>
+            <Label>Whether you're here to grow, explore, or unwind, there's always something new to discover.</Label>
+          </Stat>
+        </Grid>
+      </Grid>
+    </Wrapper>
+  );
+};
 
 export default About;
