@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { TextField, Box, Button, Typography, styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
+import { toast } from 'react-hot-toast';
 import { API } from '../../service/api';
 import { DataContext } from '../../context/DataProvider';
-
 
 const Component = styled(Box)`
     width: 400px;
@@ -12,7 +11,7 @@ const Component = styled(Box)`
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
     border-radius: 12px;
     overflow: hidden;
-     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
 `;
 
 const Wrapper = styled(Box)`
@@ -41,6 +40,7 @@ const Wrapper = styled(Box)`
         border-bottom: 1px solid #888;
     }
 `;
+
 const Image = styled('img')({
     width: 100,
     display: 'flex',
@@ -89,7 +89,6 @@ const Error = styled(Typography)`
     font-weight: 600;
 `;
 
-
 const loginInitialValues = {
     username: '',
     password: ''
@@ -113,8 +112,9 @@ const Login = ({ isUserAuthenticated }) => {
     const imageURL = '/Logo.png';
 
     useEffect(() => {
-        showError('');
-    }, [login]);
+        console.log('Account state changed:', account);  // Debug the state change
+    }, [account]);
+    
 
     const onValueChange = (e) => {
         setLogin({ ...login, [e.target.name]: e.target.value });
@@ -124,63 +124,133 @@ const Login = ({ isUserAuthenticated }) => {
         setSignup({ ...signup, [e.target.name]: e.target.value });
     };
 
+    // LOGIN VALIDATION & SUBMIT
     const loginUser = async () => {
-        let response = await API.userLogin(login);
-        if (response.isSuccess) {
-            showError('');
-            sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
-            sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
-            setAccount({ name: response.data.name, username: response.data.username });
-            isUserAuthenticated(true);
-            setLogin(loginInitialValues);
-            navigate('/');
-        } else {
-            showError('Something went wrong! Please try again later.');
+        if (!login.username || !login.password) {
+            toast.error('Please fill in all fields');
+            return;
+        }
+    
+        try {
+            const response = await API.userLogin(login);
+    
+            if (response.isSuccess) {
+                showError('');
+                sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
+                sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
+                setAccount({ name: response.data.name, username: response.data.username });
+                isUserAuthenticated(true);
+                setLogin(loginInitialValues);
+                toast.success('Login successful!');
+                navigate('/');
+            }else if (response.isError) {
+                toast.error(response.msg || 'Login failed');
+            }
+        } catch (error) {
+            console.error('Login Exception:', error);
+            toast.error(error.msg || 'Login failed due to unknown error');
         }
     };
+    
+// SIGNUP VALIDATION & SUBMIT
+const signupUser = async () => {
+    console.log("Signup data: ", signup); // Log the data being sent
 
-    const signupUser = async () => {
+    const { name, username, password } = signup;
+
+    if (!name || !username || !password) {
+        toast.error('All fields are required');
+        return;
+    }
+
+    if (password.length < 6) {
+        toast.error('Password must be at least 6 characters');
+        return;
+    }
+
+    try {
         let response = await API.userSignup(signup);
+        console.log(response); // Log the full response
         if (response.isSuccess) {
-            showError('');
+            toast.success('Signup successful! Please login');
             setSignup(signupInitialValues);
             toggleAccount('login');
+        } else if(response.isError) {
+            toast.error(response.msg || 'Signup failed');
         } else {
-            showError('Something went wrong! Please try again later.');
+            toast.error('Unexpected error occurred');
         }
-    };
+    } catch (error) {
+        console.error('Signup Exception:', error);
+        toast.error(error.msg || 'Server error during signup');
+    }
+};
+
+
 
     const toggleSignup = () => {
+        console.log('Toggling account:', account);  // Add this line for debugging
         toggleAccount(account === 'signup' ? 'login' : 'signup');
     };
+    
 
     return (
-       
         <Component>
             <Box>
                 <Image src={imageURL} alt="blog" />
                 {account === 'login' ? (
-                    <Wrapper>
-                        <TextField variant="standard" value={login.username} onChange={onValueChange} name="username" label="Enter Username" />
-                        <TextField variant="standard" type="password" value={login.password} onChange={onValueChange} name="password" label="Enter Password" />
-                        {error && <Error>{error}</Error>}
-                        <LoginButton variant="contained" onClick={loginUser}>Login</LoginButton>
-                        <Text style={{ textAlign: 'center' }}>OR</Text>
-                        <SignupButton onClick={toggleSignup}>Create an account</SignupButton>
-                    </Wrapper>
-                ) : (
-                    <Wrapper>
-                        <TextField variant="standard" onChange={onInputChange} name="name" label="Enter Name" />
-                        <TextField variant="standard" onChange={onInputChange} name="username" label="Enter Username" />
-                        <TextField variant="standard" type="password" onChange={onInputChange} name="password" label="Enter Password" />
-                        <SignupButton onClick={signupUser}>Signup</SignupButton>
-                        <Text style={{ textAlign: 'center' }}>OR</Text>
-                        <LoginButton onClick={toggleSignup}>Already have an account</LoginButton>
-                    </Wrapper>
-                )}
+    <Wrapper>
+        <TextField
+            variant="standard"
+            value={login.username}
+            onChange={onValueChange}
+            name="username"
+            label="Enter Username"
+        />
+        <TextField
+            variant="standard"
+            type="password"
+            value={login.password}
+            onChange={onValueChange}
+            name="password"
+            label="Enter Password"
+        />
+        {error && <Error>{error}</Error>}
+        <LoginButton variant="contained" onClick={loginUser}>
+            Login
+        </LoginButton>
+        <Text style={{ textAlign: 'center' }}>OR</Text>
+        <SignupButton onClick={toggleSignup}>Create an account</SignupButton>
+    </Wrapper>
+) : (
+    <Wrapper>
+        <TextField
+            variant="standard"
+            onChange={onInputChange}
+            name="name"
+            label="Enter Name"
+        />
+        <TextField
+            variant="standard"
+            onChange={onInputChange}
+            name="username"
+            label="Enter Username"
+        />
+        <TextField
+            variant="standard"
+            type="password"
+            onChange={onInputChange}
+            name="password"
+            label="Enter Password"
+        />
+        <SignupButton onClick={signupUser}>Signup</SignupButton>
+        <Text style={{ textAlign: 'center' }}>OR</Text>
+        <LoginButton onClick={toggleSignup}>Already have an account</LoginButton>
+    </Wrapper>
+)}
+
             </Box>
         </Component>
-        
     );
 };
 

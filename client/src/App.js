@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { Box } from '@mui/material';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
 //components
 import DataProvider from './context/DataProvider';
@@ -31,7 +32,10 @@ function App() {
   const [isAuthenticated, isUserAuthenticated] = useState(false);
 
   return (
+    
     <DataProvider>
+      <Toaster position="top-center" reverseOrder={false} />
+
       <BrowserRouter>
         <Box style={{ marginTop: 64 }}>
           <Routes>

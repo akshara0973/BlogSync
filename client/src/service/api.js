@@ -34,8 +34,7 @@ axiosInstance.interceptors.response.use(
     },
     function(error) {
         // Stop global loader here
-        return Promise.reject(ProcessError(error));
-    }
+        return ProcessError(error);     }
 )
 
 ///////////////////////////////
@@ -60,49 +59,27 @@ const processResponse = (response) => {
 // If fail -> returns { isError: true, status: string, msg: string, code: int }
 //////////////////////////////
 const ProcessError = async (error) => {
+    console.log("Raw Axios Error:", error);
     if (error.response) {
-        // Request made and server responded with a status code 
-        // that falls out of the range of 2xx
         if (error.response?.status === 403) {
-            // const { url, config } = error.response;
-            // console.log(error);
-            // try {
-            //     let response = await API.getRefreshToken({ token: getRefreshToken() });
-            //     if (response.isSuccess) {
-                    sessionStorage.clear();
-            //         setAccessToken(response.data.accessToken);
-
-            //         const requestData = error.toJSON();
-
-            //         let response1 = await axios({
-            //             method: requestData.config.method,
-            //             url: requestData.config.baseURL + requestData.config.url,
-            //             headers: { "content-type": "application/json", "authorization": getAccessToken() },
-            //             params: requestData.config.params
-            //         });
-            //     }
-            // } catch (error) {
-            //     return Promise.reject(error)
-            // }
+            sessionStorage.clear();
         } else {
             console.log("ERROR IN RESPONSE: ", error.toJSON());
             return {
                 isError: true,
-                msg: API_NOTIFICATION_MESSAGES.responseFailure,
+                msg: error.response.data?.msg,
                 code: error.response.status
             }
         }
-    } else if (error.request) { 
-        // The request was made but no response was received
-        console.log("ERROR IN RESPONSE: ", error.toJSON());
+    } else if (error.request) {
+        console.log("ERROR IN REQUEST: ", error.toJSON());
         return {
             isError: true,
             msg: API_NOTIFICATION_MESSAGES.requestFailure,
             code: ""
         }
-    } else { 
-        // Something happened in setting up the request that triggered an Error
-        console.log("ERROR IN RESPONSE: ", error.toJSON());
+    } else {
+        console.log("ERROR IN NETWORK/SETUP: ", error.toJSON());
         return {
             isError: true,
             msg: API_NOTIFICATION_MESSAGES.networkError,
@@ -110,6 +87,9 @@ const ProcessError = async (error) => {
         }
     }
 }
+export const logoutUser = async (data) => {
+    return await axios.post('/logout', data); // ensure this URL matches your backend route
+  };
 
 const API = {};
 
