@@ -24,7 +24,7 @@ const PrivateRoute = ({ isAuthenticated, ...props }) => {
     <>
       <Header />
       <Outlet />
-    </> : <Navigate replace to='/account' />
+    </> : <Navigate replace to='/main' />
 };
 
 function App() {
